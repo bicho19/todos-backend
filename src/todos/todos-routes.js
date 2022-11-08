@@ -6,13 +6,16 @@ module.exports = (fastify, options, done) => {
 
     fastify.get(
         "/myTodos",
-        {},
+        {
+            onRequest: [fastify.authenticate],
+        },
         TodosHandlers.fetchUserTodosHandler,
     );
 
     fastify.post(
         "/create",
         {
+            onRequest: [fastify.authenticate],
             schema: TodosSchemas.createTodoSchema,
         },
         TodosHandlers.createTodoHandler,
@@ -21,6 +24,7 @@ module.exports = (fastify, options, done) => {
     fastify.put(
         "/updateOrder",
         {
+            onRequest: [fastify.authenticate],
             schema: TodosSchemas.updateTodoOrderSchema,
         },
         TodosHandlers.updateTodosOrderHandler,

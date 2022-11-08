@@ -19,7 +19,7 @@ module.exports = {
                 }
             });
 
-            if (oldUser){
+            if (oldUser) {
                 return response.send(ErrorResponse(400, "The email address already exists, please use another one"));
             }
 
@@ -29,13 +29,13 @@ module.exports = {
                 emailAddress: request.body.email,
             });
 
-            if (!user){
+            if (!user) {
                 return response.send(ErrorResponse(500, "Error saving the user, please try again"));
             }
 
             return response.send(SuccessResponse(null, "The user has been saved successfully. You can now login"));
 
-        } catch (exception){
+        } catch (exception) {
             console.log(exception);
             return response.send(ErrorResponse(500, "Exception creating the user. Please try again"));
         }
@@ -58,14 +58,18 @@ module.exports = {
                 }
             });
 
-            if (!user){
+            if (!user) {
                 return response.send(ErrorResponse(400, "No user exists with the provided credentials"));
             }
 
             // send the user with the ID as token
-            return response.send(SuccessResponse(null, "still implementing"));
+            return response.send(SuccessResponse({
+                token: request.server.jwt.sign({
+                    id: user.id,
+                })
+            }));
 
-        } catch (exception){
+        } catch (exception) {
             console.log(exception);
             return response.send(ErrorResponse(500, "Exception login-in the user. Please try again"));
         }

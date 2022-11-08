@@ -12,6 +12,18 @@ const fastify = require('fastify')({
     logger: true,
 });
 
+// JWT authentication plugin
+fastify.register(require('@fastify/jwt'), {
+    secret: process.env.JWT_SECRET,
+    sign: {
+        algorithm: 'HS256',
+        expiresIn: "15768000000"
+    },
+});
+
+// Add auth with roles plugin
+fastify.register(require('./plugins/auth-jwt-plugin'));
+
 // Declare a route
 fastify.get('/', function (request, reply) {
     reply.send(

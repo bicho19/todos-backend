@@ -13,9 +13,10 @@ module.exports = {
     fetchUserTodosHandler: async (request, response) => {
         try {
 
-            // TODO: fetch todos by user ID
             let allTodos = await Todo.findAll({
-
+                where: {
+                    userId: request.userId
+                }
             });
 
             if (!allTodos){
@@ -42,6 +43,9 @@ module.exports = {
 
             // first, fetch the last todo order
             let lastTodo = await Todo.findOne({
+                where: {
+                    userId: request.userId
+                },
                 order: [
                     ["createdAt", "DESC"]
                 ]
