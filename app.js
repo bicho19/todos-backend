@@ -25,6 +25,8 @@ fastify.get('/', function (request, reply) {
 // declare the routes
 routes(fastify);
 
+// Connect to the database
+require('./database/models');
 
 // Run the server
 fastify.listen(
@@ -36,6 +38,5 @@ fastify.listen(
             fastify.log.error(err)
             process.exit(1)
         }
-        // Server is now listening on ${address}
     }
 );
