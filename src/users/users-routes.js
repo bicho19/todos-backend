@@ -11,6 +11,14 @@ module.exports = (fastify, options, done) => {
         UsersHandlers.createUserAccountHandler,
     );
 
+    fastify.post(
+        "/login",
+        {
+            schema: UsersSchemas.loginUserSchema,
+        },
+        UsersHandlers.loginUserHandler,
+    );
+
 
 
 

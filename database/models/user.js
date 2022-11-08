@@ -33,16 +33,16 @@ module.exports = (sequelize, dataType) => {
             unique: true,
         },
         createdAt: {
+            type: Sequelize.DATE,
             allowNull: false,
-            type: Sequelize.DATE
         },
         updatedAt: {
+            type: Sequelize.DATE,
             allowNull: false,
-            type: Sequelize.DATE
         },
         deletedAt: {
+            type: Sequelize.DATE,
             allowNull: true,
-            type: Sequelize.DATE
         },
     }, {
         sequelize,

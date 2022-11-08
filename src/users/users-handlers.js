@@ -39,5 +39,35 @@ module.exports = {
             console.log(exception);
             return response.send(ErrorResponse(500, "Exception creating the user. Please try again"));
         }
-    }
+    },
+
+
+    /**
+     * Login user into his/her account using the email address only
+     * @param {FastifyRequest} request
+     * @param {FastifyReply} response
+     * @returns {Promise<>}
+     */
+    loginUserHandler: async (request, response) => {
+        try {
+
+            // Check if a user exists with the provided email
+            let user = await User.findOne({
+                where: {
+                    emailAddress: request.body.email,
+                }
+            });
+
+            if (!user){
+                return response.send(ErrorResponse(400, "No user exists with the provided credentials"));
+            }
+
+            // send the user with the ID as token
+            return response.send(SuccessResponse(null, "still implementing"));
+
+        } catch (exception){
+            console.log(exception);
+            return response.send(ErrorResponse(500, "Exception login-in the user. Please try again"));
+        }
+    },
 }

@@ -1,7 +1,4 @@
-
-
 module.exports = {
-
     createUserAccountSchema: {
         body: {
             type: "object",
@@ -19,5 +16,18 @@ module.exports = {
                 }
             }
         }
-    }
+    },
+    loginUserSchema: {
+        body: {
+            type: "object",
+            required: ["email"],
+            properties: {
+                email: {
+                    type: "string",
+                    nullable: false,
+                    pattern: '[A-Z0-9a-z._+-]+@[A-Za-z0-9-]+\\.[A-Za-z]{2,5}',
+                }
+            }
+        }
+    },
 }

@@ -43,17 +43,34 @@ module.exports = (sequelize, dataType) => {
             type: Sequelize.DATE,
             allowNull: true,
         },
-        createdAt: {
+        order: {
+            type: DataTypes.INTEGER,
             allowNull: false,
-            type: Sequelize.DATE
+            unique: true,
+        },
+        state: {
+            type: DataTypes.ENUM("pending", "archived", "completed"),
+            allowNull: false,
+        },
+        completedAt: {
+            type: Sequelize.DATE,
+            allowNull: true,
+        },
+        archivedAt: {
+            type: Sequelize.DATE,
+            allowNull: true,
+        },
+        createdAt: {
+            type: Sequelize.DATE,
+            allowNull: false,
         },
         updatedAt: {
+            type: Sequelize.DATE,
             allowNull: false,
-            type: Sequelize.DATE
         },
         deletedAt: {
+            type: Sequelize.DATE,
             allowNull: true,
-            type: Sequelize.DATE
         },
     }, {
         sequelize,

@@ -28,6 +28,21 @@ routes(fastify);
 // Connect to the database
 require('./database/models');
 
+
+// Compile AJV Formats
+const addFormats = require("ajv-formats")
+const Ajv = require('ajv')
+const ajv = new Ajv({
+    useDefaults: true,
+    coerceTypes: true,
+    $data: true,
+    extendRefs: true
+});
+addFormats(ajv);
+fastify.setValidatorCompiler(({schema, method, url, httpPart}) => {
+    return ajv.compile(schema)
+});
+
 // Run the server
 fastify.listen(
     {
