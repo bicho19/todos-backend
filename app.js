@@ -24,6 +24,15 @@ fastify.register(require('@fastify/jwt'), {
 // Add auth with roles plugin
 fastify.register(require('./plugins/auth-jwt-plugin'));
 
+
+// Register CORS options
+fastify.register(require('@fastify/cors'), {
+    // put your options here
+    // origin: ["http://localhost:3000", /\.vesselcanada\.com$/],
+    origin: "*",
+    methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTION']
+});
+
 // Declare a route
 fastify.get('/', function (request, reply) {
     reply.send(
