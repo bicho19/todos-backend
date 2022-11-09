@@ -40,7 +40,7 @@ module.exports = {
      */
     createTodoHandler:  async (request, response) => {
         try {
-
+            
             // first, fetch the last todo order
             let lastTodo = await Todo.findOne({
                 where: {
@@ -57,7 +57,7 @@ module.exports = {
 
             // TODO: create a new todo with the logged in user
             let todo = await Todo.create({
-                userId: "e1e49299-467a-47da-ad40-66024f44a2ec",
+                userId: request.userId,
                 title: request.body.title,
                 description: request.body.description ?? null,
                 dueDate: request.body.dueBy ?? null,

@@ -15,6 +15,7 @@ module.exports = (sequelize, dataType) => {
         }
     }
 
+    // This is defines the todos table, which should have the userId and order unique between each other
     Todo.init({
         id: {
             type: DataTypes.UUIDV4,

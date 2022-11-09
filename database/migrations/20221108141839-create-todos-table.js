@@ -15,6 +15,7 @@ module.exports = {
             userId: {
                 type: DataTypes.UUID,
                 allowNull: false,
+                unique: "user_order_unique",
                 references: {
                     model: 'users',
                     key: 'id'
@@ -35,7 +36,7 @@ module.exports = {
             order: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                unique: true,
+                unique: "user_order_unique",
             },
             state: {
                 type: DataTypes.ENUM("pending", "archived", "completed"),
@@ -61,6 +62,12 @@ module.exports = {
                 type: Sequelize.DATE,
                 allowNull: true,
             },
+        }, {
+            uniqueKeys: {
+                user_order_unique: {
+                    fields: ['userId', 'order']
+                }
+            }
         });
     },
 
