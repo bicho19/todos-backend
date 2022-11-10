@@ -16,7 +16,11 @@ module.exports = {
             let allTodos = await Todo.findAll({
                 where: {
                     userId: request.userId
-                }
+                },
+                order: [
+                    ["state", "ASC"],
+                    ["order", "ASC"]
+                ]
             });
 
             if (!allTodos){
