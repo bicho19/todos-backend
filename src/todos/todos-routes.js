@@ -30,6 +30,15 @@ module.exports = (fastify, options, done) => {
         TodosHandlers.updateTodosOrderHandler,
     );
 
+    fastify.put(
+        "/setCompleted/:id",
+        {
+            onRequest: [fastify.authenticate],
+            schema: TodosSchemas.markTodoAsCompletedSchema,
+        },
+        TodosHandlers.markTodoAsCompletedHandler,
+    );
+
 
     done();
 }

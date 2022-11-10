@@ -1,6 +1,6 @@
 const {ErrorResponse, SuccessResponse} = require("../../utils/response-schema");
 const {User, Todo} = require("../../database/models");
-const {DataTypes, Sequelize, or} = require("sequelize");
+const moment = require("moment");
 
 module.exports = {
 
@@ -40,7 +40,7 @@ module.exports = {
      */
     createTodoHandler:  async (request, response) => {
         try {
-            
+
             // first, fetch the last todo order
             let lastTodo = await Todo.findOne({
                 where: {
@@ -95,6 +95,36 @@ module.exports = {
         } catch (exception){
             console.log(exception);
             return response.send(ErrorResponse(500, "Exception updating the todos order. Please try again"));
+        }
+    },
+
+    /**
+     * Set a todo as completed
+     * @param {FastifyRequest} request
+     * @param {FastifyReply} response
+     * @returns {Promise<>}
+     */
+    markTodoAsCompletedHandler: async (request, response) => {
+        try {
+            //
+            let todo = await Todo.findByPk(request.params.id, {});
+
+            if (!todo){
+                return response.send(ErrorResponse(400, "Could not find the todo"))
+            }
+
+            // update the state and completed at fields
+            todo.setDataValue("state", "completed");
+            todo.setDataValue("completedAt", moment().toISOString());
+
+
+            await todo.save();
+
+
+            return response.send(SuccessResponse(null, "the todo has been updated"));
+        } catch (exception){
+            console.log(exception);
+            return response.send(ErrorResponse(500, "Exception updating the todo. Please try again"));
         }
     },
 }

@@ -47,5 +47,19 @@ module.exports = {
                 }
             }
         }
+    },
+
+    markTodoAsCompletedSchema: {
+        params: {
+            type: "object",
+            required: ["id"],
+            properties: {
+                id: {
+                    type: 'string',
+                    nullable: false,
+                    format: "uuid"
+                },
+            }
+        }
     }
 }
