@@ -87,17 +87,54 @@ module.exports = {
      * @returns {Promise<>}
      */
     updateTodosOrderHandler: async (request, response) => {
+        let currentTransaction = await sequelize.transaction();
         try {
 
-            //
             let todos = request.body;
 
-            console.log(todos);
+            // This is a simple test to limit the order to two consecutive orders only
+            if (todos[0].order < todos[1].order && todos[0].order+1 !== todos[1].order){
+                await currentTransaction.rollback();
+                return response.send(ErrorResponse(400, "Error: Currently we only support changing orders to two consecutive todos"))
+            }
 
+            if (todos[0].order > todos[1].order && todos[0].order-1 !== todos[1].order){
+                await currentTransaction.rollback();
+                return response.send(ErrorResponse(400, "Error: Currently we only support changing orders to two consecutive todos"))
+            }
 
-            return response.send(SuccessResponse(null, "still implementing"));
+            // Find the first todo
+            let firstTodo = await Todo.findByPk(todos[0].id, {});
+            if (!firstTodo){
+                await currentTransaction.rollback();
+                return response.send(ErrorResponse(400, "Error: Could not find the first todo"));
+            }
+
+            let secondTodo = await Todo.findByPk(todos[1].id, {});
+            if (!secondTodo){
+                await currentTransaction.rollback();
+                return response.send(ErrorResponse(400, "Error: Could not find the second todo"));
+            }
+
+            // Change the second todos item to a temporary value, to work around the unique issue
+            firstTodo.setDataValue("order", -100);
+            secondTodo.setDataValue("order", todos[1].order);
+
+            await firstTodo.save({transaction: currentTransaction});
+            await secondTodo.save({transaction: currentTransaction});
+
+            // Update the first todos item to its original order
+            firstTodo.setDataValue("order", todos[0].order);
+            await firstTodo.save({transaction: currentTransaction});
+
+            // Temporary rollback the transaction
+            await currentTransaction.commit();
+            return response.send(SuccessResponse(null, "Todos updated with success"));
         } catch (exception){
             console.log(exception);
+            if (currentTransaction){
+                await currentTransaction.rollback();
+            }
             return response.send(ErrorResponse(500, "Exception updating the todos order. Please try again"));
         }
     },
